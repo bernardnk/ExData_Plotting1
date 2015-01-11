@@ -1,0 +1,38 @@
+# Course Project 1
+# Our overall goal here is simply to examine how household energy usage 
+# varies over a 2-day period in February, 2007.
+
+# Source: This assignment uses data from the UC Irvine Machine Learning 
+# Repository, a popular repository for machine learning datasets.
+
+# Code to read the data so that the plot can be fully reproduced.
+zipFileName <- "exdata-data-household_power_consumption.zip"
+if(!file.exists(zipFileName))
+{
+        fileUrl1 <- "https://d396qusza40orc.cloudfront.net/exdata%2Fdata%2Fhousehold_power_consumption.zip"
+        download.file(fileUrl1,destfile=zipFileName,method="curl")
+}
+        
+#if (!file.exists("household_power_consumption.txt"))
+#{
+#        file <- unzip(zipFileName)
+#}
+file <- unzip(zipFileName)
+household <- read.table(file, header=T, sep=";")
+household$Date <- as.Date(household$Date, format="%d/%m/%Y")
+df <- household[(household$Date=="2007-02-01") | (household$Date=="2007-02-02"),]
+df$Global_active_power <- as.numeric(as.character(df$Global_active_power))
+df$Global_reactive_power <- as.numeric(as.character(df$Global_reactive_power))
+df$Voltage <- as.numeric(as.character(df$Voltage))
+df$Global_intensity <- as.numeric(as.character(df$Global_intensity))
+df$Sub_metering_1 <- as.numeric(as.character(df$Sub_metering_1))
+df$Sub_metering_2 <- as.numeric(as.character(df$Sub_metering_2))
+df$Sub_metering_3 <- as.numeric(as.character(df$Sub_metering_3))
+
+# generate the histogram for Global_active_power
+hist(df$Global_active_power, main = paste("Global Active Power"),
+     col="red", xlab="Global Active Power (kilowatts)")
+
+# Code that creates the PNG file
+dev.copy(png, file="plot1.png", width=480, height=480)
+dev.off()
